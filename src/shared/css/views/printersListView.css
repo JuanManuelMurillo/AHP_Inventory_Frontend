@@ -1,0 +1,12 @@
+.content.panel-open {
+    margin-right: 28.5rem;
+}
+
+@media (max-width: 768px) {
+    .content.panel-closed {
+        margin-right: 2.5rem;
+    }
+    .content.panel-open {
+        margin-right: 0;
+    }
+}

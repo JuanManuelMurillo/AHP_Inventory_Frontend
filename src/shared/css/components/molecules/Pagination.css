@@ -1,0 +1,25 @@
+.pagination-custom .page-link {
+    color: var(--color-primary);
+    background-color: var(--color-bg-surface);
+    border-color: var(--color-border);
+}
+
+.pagination-custom .page-link:hover {
+    color: var(--color-text-inverted);
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+}
+
+/* Página actual */
+.pagination-custom .page-item.active .page-link {
+    color: var(--color-text-inverted);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Botones deshabilitados (< y > cuando estás al inicio/final) */
+.pagination-custom .page-item.disabled .page-link {
+    color: var(--color-text-muted);
+    background-color: var(--color-bg-muted);
+    border-color: var(--color-border);
+}

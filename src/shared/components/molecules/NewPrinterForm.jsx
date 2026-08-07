@@ -1,0 +1,338 @@
+"use client";
+
+import { useState } from "react";
+import AddModal from "./AddModal";
+import "@/shared/css/components/molecules/NewPrinterForm.css";
+
+export default function NewPrinterForm({
+    onCancel,
+    brands,
+    series,
+    models,
+    newPrinter,
+    setNewPrinter,
+    handleSubmit,
+    addBrand,
+    addSeries,
+    addModel,
+}
+) {
+
+    const filteredSeries = series.filter(
+        (serie) => serie.brand_id === Number(newPrinter.brand)
+    );
+
+    const filteredModels = models.filter(
+        (model) => model.series_id === Number(newPrinter.series)
+    );
+
+    const [modal, setModal] = useState({
+        open: false,
+        type: null,
+    });
+
+    const openModal = (type) => {
+        setModal({
+            open: true,
+            type,
+        });
+    };
+
+    const closeModal = () => {
+        setModal({
+            open: false,
+            type: null,
+        });
+    };
+
+    return (
+        <>
+            <form 
+                className="mt-3"
+                onSubmit={handleSubmit}
+            >
+
+                <hr/>
+
+                <h4>
+                    Registro
+                </h4>
+
+                <div className="mb-3 row add-group">
+                        <label htmlFor="brand" className="form-label">
+                            Marca
+                        </label>
+                    <div className="col-10">
+                        <select
+                            id="brand"
+                            className="form-select"
+                            value={newPrinter.brand}
+                            onChange={(e) =>
+                                setNewPrinter({
+                                    ...newPrinter,
+                                    brand: e.target.value,
+                                    series: "",
+                                    model: "",
+                                })
+                            }
+                            required
+                        >
+                            <option value="">Seleccione una marca</option>
+                            {brands.map((brand) => (
+                                <option key={brand.id} value={brand.id}>
+                                    {brand.brand}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="col-2">
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={() => openModal("brand")}
+                        >
+                            +
+                        </button>
+                    </div>
+
+                </div>
+
+                <div className="mb-3 row add-group">
+                        <label htmlFor="series" className="form-label">
+                            Serie
+                        </label>
+                    <div className="col-10">
+                        <select
+                            id="series"
+                            className="form-select"
+                            value={newPrinter.series}
+                            onChange={(e) =>
+                                setNewPrinter({
+                                    ...newPrinter,
+                                    series: e.target.value,
+                                    model: "",
+                                })
+                            }
+                            disabled={!newPrinter.brand}
+                            required
+                        >
+                            <option value="">Seleccione una serie</option>
+
+                            {filteredSeries.map((serie) => (
+                                <option key={serie.id} value={serie.id}>
+                                    {serie.series}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="col-2">
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={() => openModal("series")}
+                        >
+                            +
+                        </button>
+                    </div>
+
+                </div>
+
+                <div className="mb-3 row add-group">
+
+                        <label htmlFor="model" className="form-label">
+                            Modelo
+                        </label>
+                    <div className="col-10">
+                        <select
+                            id="brand"
+                            className="form-select"
+                            value={newPrinter.model}
+                            disabled={!newPrinter.series}
+                            onChange={(e) => setNewPrinter({
+                                ...newPrinter,
+                                model: e.target.value,
+                            })}
+                            required
+                        >
+                            <option value="">Seleccione un modelo</option>
+                            {filteredModels.map((model) => (
+                                <option
+                                    key={model.id}
+                                    value={model.id}
+                                >
+                                    {model.model}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="col-2">
+                        <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={() => openModal("model")}
+                        >
+                            +
+                        </button>
+                    </div>
+
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="serial" className="form-label">
+                        Número de serie
+                    </label>
+                    <input
+                        id="serial"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setNewPrinter({
+                            ...newPrinter,
+                            serialNumber: e.target.value,
+                        })}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="brand" className="form-label">
+                        Estado
+                    </label>
+                    <select
+                        id="brand"
+                        className="form-select"
+                        value={newPrinter.status}
+                        onChange={(e) => setNewPrinter({
+                            ...newPrinter,
+                            status: e.target.value,
+                        })}
+                        required
+                    >
+                        <option value="">Seleccione un estado</option>
+                        <option>Nueva</option>
+                        <option>Usada - Remanufacturada</option>
+                        <option>Usada - Pasando Copias</option>
+                    </select>
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="measurer" className="form-label">
+                        Medidor
+                    </label>
+                    <input
+                        id="measurer"
+                        type="number"
+                        className="form-control"
+                        onChange={(e) => setNewPrinter({
+                            ...newPrinter,
+                            measurer: e.target.value,
+                        })}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="notes" className="form-label">
+                        Notas
+                    </label>
+                    <textarea
+                        id="notes"
+                        className="form-control"
+                        rows="3"
+                        onChange={(e) => setNewPrinter({
+                            ...newPrinter,
+                            notes: e.target.value,
+                        })}
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="brand" className="form-label">
+                        Disponibilidad
+                    </label>
+                    <select
+                        id="brand"
+                        className="form-select"
+                        value={newPrinter.availability}
+                        onChange={(e) => setNewPrinter({
+                            ...newPrinter,
+                            availability: e.target.value,
+                        })}
+                        required
+                    >
+                        <option value="">Seleccione la disponibilidad</option>
+                        <option>En bodega</option>
+                        <option>Vendida</option>
+                        <option>En uso</option>
+                    </select>
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="serial" className="form-label">
+                        Cliente
+                    </label>
+                    <input
+                        id="serial"
+                        type="text"
+                        className="form-control"
+                        onChange={(e) => setNewPrinter({
+                            ...newPrinter,
+                            client: e.target.value,
+                        })}
+                    />
+                </div>
+
+                <div className="d-grid gap-2">
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                    >
+                        Guardar
+                    </button>
+
+                    <button
+                        type="button"
+                        className="btn btn-outline-secondary"
+                        onClick={onCancel}
+                    >
+                        Cancelar
+                    </button>
+                </div>
+
+            </form>
+
+            <AddModal
+                show={modal.open}
+                type={modal.type}
+                brands={brands}
+                series={series}
+                onClose={closeModal}
+                onSave={async (type, data) => {
+
+                    switch (type) {
+
+                        case "brand":
+                            await addBrand(data.brand);
+                            break;
+
+                        case "series":
+                            await addSeries(
+                                data.series,
+                                data.brandId,
+                            );
+                            break;
+                        case "model":
+                            await addModel(
+                                data.model,
+                                data.seriesId,
+                                data.image,
+                            );
+                            break;
+                    }
+
+                    closeModal();
+                }}
+            />
+        </>
+
+    )
+}
